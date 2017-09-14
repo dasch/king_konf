@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "A simple configuration library"
   spec.description = "A simple configuration library"
-  spec.homepage = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage = "https://github.com/dasch/king_konf"
   spec.license = "MIT"
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
