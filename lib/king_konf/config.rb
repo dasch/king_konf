@@ -38,9 +38,9 @@ module KingKonf
 
     def valid?(value)
       case @type
-      when :string then value.is_a?(String)
+      when :string then value.is_a?(String) || value.nil?
       when :list then value.is_a?(Array)
-      when :integer then value.is_a?(Integer)
+      when :integer then value.is_a?(Integer) || value.nil?
       when :boolean then value == true || value == false
       else raise "invalid type #{@type}"
       end

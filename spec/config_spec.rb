@@ -38,6 +38,13 @@ describe KingKonf::Config do
         config.level = "yolo"
       }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo", expected integer')
     end
+
+    it "allows setting variables to nil" do
+      config.greeting = "hello"
+      config.greeting = nil
+
+      expect(config.greeting).to eq nil
+    end
   end
 
   describe "environment variable API" do
