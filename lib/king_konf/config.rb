@@ -146,9 +146,9 @@ module KingKonf
 
       # Only complain about unknown ENV vars if there's a prefix defined.
       if self.class.prefix
-        env.keys.grep(/^#{prefix.upcase}_/).each do |key|
+        env.keys.grep(/^#{prefix}/).each do |key|
           unless loaded_keys.include?(key)
-            raise ConfigError, "unknown env variable #{key}"
+            raise ConfigError, "unknown environment variable #{key}"
           end
         end
       end

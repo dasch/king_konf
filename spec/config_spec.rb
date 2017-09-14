@@ -39,4 +39,32 @@ describe KingKonf::Config do
       }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo", expected integer')
     end
   end
+
+  describe "environment variable API" do
+    it "allows setting variables through the ENV" do
+      env = {
+        "TEST_GREETING" => "hello",
+        "TEST_LEVEL" => "42",
+        "TEST_ENABLED" => "true",
+        "TEST_PHRASES" => "hello, world!;goodbye!;yolo!",
+      }
+
+      config = config_class.new(env: env)
+
+      expect(config.greeting).to eq "hello"
+      expect(config.level).to eq 42
+      expect(config.enabled).to eq true
+      expect(config.phrases).to eq ["hello, world!", "goodbye!", "yolo!"]
+    end
+
+    it "raises ConfigError if an unknown variable is passed in the ENV" do
+      env = {
+        "TEST_MISSING" => "hello",
+      }
+
+      expect {
+        config_class.new(env: env)
+      }.to raise_exception(KingKonf::ConfigError, "unknown environment variable TEST_MISSING")
+    end
+  end
 end
