@@ -1,8 +1,6 @@
 # KingKonf
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/king_konf`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+KingKonf gives you a way of declaratively specifying configuration variables for your application or library. It is focused on simplicity and being able to work well with environment variables, meaning that there is no nesting or fancy structures: all configuration can be passed as strings.
 
 ## Installation
 
@@ -22,13 +20,64 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+In order to specify a set configuration variables, simply subclass `KingKonf::Config` and use the DSL:
+
+```ruby
+require "king_konf"
+
+class MyApplication::Config < KingKonf::Config
+  # The prefix is used to identify environment variables. Here, we require
+  # that all environment variables used for config start with `MY_APP_`,
+  # followed by the all caps name of the variable.
+  prefix :my_app
+
+  # Strings are the simplest:
+  string :title
+
+  # Integer variables require the value to be a valid integer:
+  integer :score
+
+  # Booleans by default use "true", "false", "1", and "0" as valid values:
+  boolean :promoted
+
+  # These can be configured:
+  boolean :allow_comments, true_values: ["yes"], false_values: ["no"]
+
+  # Lists are by default comma-separated arrays of strings:
+  list :tags
+
+  # You can separate with other characters, and decode each value as another type:
+  list :codes, sep: ";", items: :integer
+
+  # You can also provide a default value to any variable:
+  string :body, default: "N/A"
+end
+```
+
+Now that we've defined a configuration class, we can initialize it. KingKonf will read the ENV and detect any variables that match the prefix:
+
+```ruby
+# These would normally be passed by the system running your app:
+ENV["MY_APP_TITLE"] = "Hello, World!"
+ENV["MY_APP_SCORE"] = "85"
+ENV["MY_APP_PROMOTED"] = "true"
+ENV["MY_APP_ALLOW_COMMENTS"] = "no"
+ENV["MY_APP_TAGS"] = "greetings,introductions,articles"
+ENV["MY_APP_CODES"] = "435;2342;8678"
+
+config = MyApplication::Config.new
+
+config.title #=> "Hello, World!"
+config.score #=> 85
+config.promoted #=> true
+config.allow_comments #=> false
+config.tags #=> ["greetings", "introductions", "articles"]
+config.codes #=> [435, 2342, 8678]
+```
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
