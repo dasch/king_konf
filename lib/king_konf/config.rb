@@ -90,7 +90,7 @@ module KingKonf
       end
     end
 
-    def initialize(env: {})
+    def initialize(env: ENV)
       load_env(env)
     end
 
