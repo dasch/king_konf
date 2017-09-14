@@ -29,7 +29,7 @@ module KingKonf
   end
 
   class Variable
-    attr_reader :name, :default, :options
+    attr_reader :name, :type, :default, :options
 
     def initialize(name, type, default, options)
       @name, @type, @default = name, type, default
@@ -118,7 +118,7 @@ module KingKonf
       if variable.valid?(value)
         instance_variable_set("@#{name}", value)
       else
-        raise ConfigError, "invalid value #{value.inspect}"
+        raise ConfigError, "invalid value #{value.inspect}, expected #{variable.type}"
       end
     end
 
