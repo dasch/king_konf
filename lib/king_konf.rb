@@ -1,5 +1,6 @@
 require "king_konf/version"
+require "king_konf/config"
 
 module KingKonf
-  # Your code goes here...
+  ConfigError = Class.new(StandardError)
 end
