@@ -1,5 +1,4 @@
-require "king_konf/config"
-require "king_konf/config_file_loader"
+require "king_konf"
 
 RSpec.describe KingKonf::ConfigFileLoader do
   let(:config_class) {
