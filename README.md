@@ -75,6 +75,35 @@ config.tags #=> ["greetings", "introductions", "articles"]
 config.codes #=> [435, 2342, 8678]
 ```
 
+If you prefer to use a config file, that's also possible. Simply load a YAML file with `#load_file`:
+
+```ruby
+config.load_file("config/my_app.yml")
+```
+
+A common pattern is to store config for all runtime environments in a single file and select the config based on the current environment, e.g.:
+
+```ruby
+config.load_file("config/my_app.yml", Rails.environment)
+```
+
+In that case, structure the config file like so:
+
+```yaml
+development:
+  title: hello
+  score: 25
+
+test:
+  title: yolo
+  score: 13
+
+production:
+  title: yeah
+  score: 99
+```
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
