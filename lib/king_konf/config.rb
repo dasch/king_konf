@@ -90,6 +90,12 @@ module KingKonf
       end
     end
 
+    def decode(name, value)
+      decoded_value = self.class.variable(name).decode(value)
+
+      set(name, decoded_value)
+    end
+
     def set(name, value)
       unless self.class.variable?(name)
         raise ConfigError, "unknown configuration variable #{name}"

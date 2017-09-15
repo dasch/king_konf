@@ -58,6 +58,12 @@ describe KingKonf::Config do
 
       expect(config.greeting).to eq nil
     end
+
+    it "allows decoding strings into the variable's type" do
+      config.decode(:level, "99")
+
+      expect(config.level).to eq 99
+    end
   end
 
   describe "environment variable API" do
