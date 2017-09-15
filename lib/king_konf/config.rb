@@ -5,10 +5,15 @@ module KingKonf
   class Variable
     attr_reader :name, :type, :default, :description, :options
 
-    def initialize(name, type, default, description, options)
+    def initialize(name:, type:, default:, description:, required:, options:)
       @name, @type, @default = name, type, default
       @description = description
+      @required = required
       @options = options
+    end
+
+    def required?
+      @required
     end
 
     def valid?(value)
@@ -48,9 +53,16 @@ module KingKonf
       end
 
       %i(boolean integer string list).each do |type|
-        define_method(type) do |name, default: nil, **options|
+        define_method(type) do |name, default: nil, required: false, **options|
           description, @desc = @desc, nil
-          variable = Variable.new(name, type, default, description, options)
+          variable = Variable.new(
+            name: name,
+            type: type,
+            default: default,
+            required: required,
+            description: description,
+            options: options,
+          )
 
           @variables ||= {}
           @variables[name.to_s] = variable
@@ -107,6 +119,14 @@ module KingKonf
         instance_variable_set("@#{name}", value)
       else
         raise ConfigError, "invalid value #{value.inspect}, expected #{variable.type}"
+      end
+    end
+
+    def validate!
+      self.class.variables.each do |variable|
+        if variable.required? && get(variable.name).nil?
+          raise ConfigError, "required variable `#{variable.name}` is not defined"
+        end
       end
     end
 

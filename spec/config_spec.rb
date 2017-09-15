@@ -5,7 +5,7 @@ describe KingKonf::Config do
     Class.new(KingKonf::Config) do
       prefix :test
 
-      string :greeting
+      string :greeting, required: true
 
       desc "pitch level"
       integer :level, default: 0
@@ -19,11 +19,17 @@ describe KingKonf::Config do
 
   let(:config) { config_class.new }
 
-  describe "DSL" do
-    it "allows adding a description to variables" do
-      expect(config_class.variable(:level).description).to eq "pitch level"
-      expect(config_class.variable(:enabled).description).to eq "whether greeting is enabled"
-      expect(config_class.variable(:phrases).description).to eq nil
+  it "allows adding a description to variables" do
+    expect(config_class.variable(:level).description).to eq "pitch level"
+    expect(config_class.variable(:enabled).description).to eq "whether greeting is enabled"
+    expect(config_class.variable(:phrases).description).to eq nil
+  end
+
+  describe "#validate!" do
+    it "raises ConfigError if a required variable is missing" do
+      expect {
+        config.validate!
+      }.to raise_exception(KingKonf::ConfigError, "required variable `greeting` is not defined")
     end
   end
 
