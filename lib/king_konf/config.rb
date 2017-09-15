@@ -76,7 +76,7 @@ module KingKonf
       load_env(env)
     end
 
-    def load_file(path, environment)
+    def load_file(path, environment = nil)
       loader = ConfigFileLoader.new(self)
       loader.load_file(path, environment)
     end
