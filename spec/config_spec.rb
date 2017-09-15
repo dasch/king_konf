@@ -6,13 +6,26 @@ describe KingKonf::Config do
       prefix :test
 
       string :greeting
+
+      desc "pitch level"
       integer :level, default: 0
+
+      desc "whether greeting is enabled"
       boolean :enabled, default: false
+
       list :phrases, sep: ";", items: :string
     end
   }
 
   let(:config) { config_class.new }
+
+  describe "DSL" do
+    it "allows adding a description to variables" do
+      expect(config_class.variable(:level).description).to eq "pitch level"
+      expect(config_class.variable(:enabled).description).to eq "whether greeting is enabled"
+      expect(config_class.variable(:phrases).description).to eq nil
+    end
+  end
 
   describe "object API" do
     it "allows defining string variables" do

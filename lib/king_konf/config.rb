@@ -3,10 +3,11 @@ require "king_konf/config_file_loader"
 
 module KingKonf
   class Variable
-    attr_reader :name, :type, :default, :options
+    attr_reader :name, :type, :default, :description, :options
 
-    def initialize(name, type, default, options)
+    def initialize(name, type, default, description, options)
       @name, @type, @default = name, type, default
+      @description = description
       @options = options
     end
 
@@ -48,7 +49,8 @@ module KingKonf
 
       %i(boolean integer string list).each do |type|
         define_method(type) do |name, default: nil, **options|
-          variable = Variable.new(name, type, default, options)
+          description, @desc = @desc, nil
+          variable = Variable.new(name, type, default, description, options)
 
           @variables ||= {}
           @variables[name.to_s] = variable
@@ -61,6 +63,12 @@ module KingKonf
             set(name, value)
           end
         end
+      end
+
+      private
+
+      def desc(description)
+        @desc = description
       end
     end
 
