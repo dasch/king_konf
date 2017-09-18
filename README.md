@@ -73,6 +73,10 @@ config.promoted #=> true
 config.allow_comments #=> false
 config.tags #=> ["greetings", "introductions", "articles"]
 config.codes #=> [435, 2342, 8678]
+
+# Boolean variables also get a nice query method alias:
+config.promoted? #=> true
+config.allow_comments? #=> false
 ```
 
 If you prefer to use a config file, that's also possible. Simply load a YAML file with `#load_file`:
