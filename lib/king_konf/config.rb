@@ -42,6 +42,10 @@ module KingKonf
             get(name)
           end
 
+          if variable.boolean?
+            alias_method("#{name}?", name)
+          end
+
           define_method("#{name}=") do |value|
             set(name, value)
           end

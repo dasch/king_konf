@@ -72,6 +72,19 @@ describe KingKonf::Config do
       }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo", expected integer')
     end
 
+    it "allows defining boolean variables" do
+      expect(config.enabled).to eq false
+
+      config.enabled = true
+
+      expect(config.enabled).to eq true
+      expect(config.enabled?).to eq true
+
+      expect {
+        config.enabled = "yolo"
+      }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo", expected boolean')
+    end
+
     it "allows setting variables to nil" do
       config.greeting = "hello"
       config.greeting = nil
