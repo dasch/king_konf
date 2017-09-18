@@ -3,7 +3,7 @@ require "king_konf"
 describe KingKonf::Config do
   let(:config_class) {
     Class.new(KingKonf::Config) do
-      prefix :test
+      env_prefix :test
 
       string :greeting, required: true
 

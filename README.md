@@ -29,7 +29,7 @@ class MyApplication::Config < KingKonf::Config
   # The prefix is used to identify environment variables. Here, we require
   # that all environment variables used for config start with `MY_APP_`,
   # followed by the all caps name of the variable.
-  prefix :my_app
+  env_prefix :my_app
 
   # Strings are the simplest:
   string :title

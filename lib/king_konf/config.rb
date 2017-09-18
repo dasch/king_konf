@@ -6,9 +6,9 @@ module KingKonf
     @variables = {}
 
     class << self
-      def prefix(prefix = nil)
-        @prefix = prefix if prefix
-        @prefix
+      def env_prefix(prefix = nil)
+        @env_prefix = prefix if prefix
+        @env_prefix
       end
 
       def variable(name)
@@ -115,7 +115,7 @@ module KingKonf
 
     def load_env(env)
       loaded_keys = []
-      prefix = self.class.prefix ? "#{self.class.prefix.upcase}_" : ""
+      prefix = self.class.env_prefix ? "#{self.class.env_prefix.upcase}_" : ""
 
       self.class.variables.each do |variable|
         key = prefix + variable.name.upcase.to_s
@@ -128,7 +128,7 @@ module KingKonf
       end
 
       # Only complain about unknown ENV vars if there's a prefix defined.
-      if self.class.prefix
+      if self.class.env_prefix
         env.keys.grep(/^#{prefix}/).each do |key|
           unless loaded_keys.include?(key)
             raise ConfigError, "unknown environment variable #{key}"
