@@ -4,7 +4,7 @@ module KingKonf
   class Variable
     attr_reader :name, :type, :default, :description, :options
 
-    def initialize(name:, type:, default:, description:, required:, options:)
+    def initialize(name:, type:, default: nil, description: "", required: false, options: {})
       @name, @type, @default = name, type, default
       @description = description
       @required = required
@@ -27,6 +27,12 @@ module KingKonf
 
     def decode(value)
       Decoder.public_send(@type, value, **options)
+    end
+
+    %i(boolean integer string list).each do |type|
+      define_method("#{type}?") do
+        @type == type
+      end
     end
   end
 end
