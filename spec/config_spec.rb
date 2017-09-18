@@ -33,6 +33,20 @@ describe KingKonf::Config do
     end
   end
 
+  describe "#decode" do
+    it "allows decoding strings into the variable's type" do
+      config.decode(:level, "99")
+
+      expect(config.level).to eq 99
+    end
+
+    it "raises ConfigError if the value cannot be decoded" do
+      expect {
+        config.decode(:level, "XXX")
+      }.to raise_exception(KingKonf::ConfigError, '"XXX" is not an integer')
+    end
+  end
+
   describe "object API" do
     it "allows defining string variables" do
       expect(config.greeting).to eq nil
@@ -63,12 +77,6 @@ describe KingKonf::Config do
       config.greeting = nil
 
       expect(config.greeting).to eq nil
-    end
-
-    it "allows decoding strings into the variable's type" do
-      config.decode(:level, "99")
-
-      expect(config.level).to eq 99
     end
   end
 
