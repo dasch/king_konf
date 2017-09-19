@@ -31,8 +31,9 @@ class MyApplication::Config < KingKonf::Config
   # followed by the all caps name of the variable.
   env_prefix :my_app
 
-  # Strings are the simplest:
-  string :title
+  # Strings are the simplest. This variable is required and *must* be set. By default,
+  # a variable is optional.
+  string :title, required: true
 
   # Integer variables require the value to be a valid integer:
   integer :score
@@ -66,6 +67,10 @@ ENV["MY_APP_TAGS"] = "greetings,introductions,articles"
 ENV["MY_APP_CODES"] = "435;2342;8678"
 
 config = MyApplication::Config.new
+
+# This validates that all required variables have been set, raising
+# KingKonf::ConfigError if one is missing.
+config.validate!
 
 config.title #=> "Hello, World!"
 config.score #=> 85
