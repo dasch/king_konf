@@ -23,7 +23,7 @@ module KingKonf
         @variables.values
       end
 
-      %i(boolean integer string list).each do |type|
+      %i(boolean integer float string list).each do |type|
         define_method(type) do |name, default: nil, required: false, **options|
           description, @desc = @desc, nil
           variable = Variable.new(
@@ -91,7 +91,7 @@ module KingKonf
       variable = self.class.variable(name)
 
       if variable.valid?(value)
-        instance_variable_set("@#{name}", value)
+        instance_variable_set("@#{name}", variable.cast(value))
       else
         raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, expected #{variable.type}"
       end

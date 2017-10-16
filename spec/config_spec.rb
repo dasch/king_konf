@@ -14,6 +14,8 @@ describe KingKonf::Config do
       boolean :enabled, default: false
 
       list :phrases, sep: ";", items: :string
+
+      float :happiness, default: 1.0
     end
   }
 
@@ -70,6 +72,21 @@ describe KingKonf::Config do
       expect {
         config.level = "yolo"
       }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `level`, expected integer')
+    end
+
+    it "allows defining float variables" do
+      expect(config.happiness).to eq 1.0
+
+      config.happiness = 0.5
+
+      expect(config.happiness).to eq 0.5
+
+      # Setting an integer is okay:
+      config.happiness = 0
+
+      expect {
+        config.happiness = "yolo"
+      }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `happiness`, expected float')
     end
 
     it "allows defining boolean variables" do
