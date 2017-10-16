@@ -23,7 +23,7 @@ module KingKonf
         @variables.values
       end
 
-      %i(boolean integer string list).each do |type|
+      %i(boolean integer float string list).each do |type|
         define_method(type) do |name, default: nil, required: false, **options|
           description, @desc = @desc, nil
           variable = Variable.new(
