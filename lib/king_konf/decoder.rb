@@ -26,5 +26,9 @@ module KingKonf
     rescue ArgumentError
       raise ConfigError, "#{value.inspect} is not an integer"
     end
+
+    def float(value, **)
+      Float(value)
+    end
   end
 end

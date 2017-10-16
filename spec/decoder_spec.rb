@@ -15,4 +15,10 @@ describe KingKonf::Decoder do
       }.to raise_exception(KingKonf::ConfigError, '"hello" is not a boolean: must be one of true, 1, false, 0')
     end
   end
+
+  describe ".float" do
+    it "decodes floats" do
+      expect(KingKonf::Decoder.float("1.5")).to eq 1.5
+    end
+  end
 end
