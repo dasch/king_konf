@@ -91,7 +91,7 @@ module KingKonf
       variable = self.class.variable(name)
 
       if variable.valid?(value)
-        instance_variable_set("@#{name}", value)
+        instance_variable_set("@#{name}", variable.cast(value))
       else
         raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, expected #{variable.type}"
       end

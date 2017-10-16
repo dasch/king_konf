@@ -81,6 +81,9 @@ describe KingKonf::Config do
 
       expect(config.happiness).to eq 0.5
 
+      # Setting an integer is okay:
+      config.happiness = 0
+
       expect {
         config.happiness = "yolo"
       }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `happiness`, expected float')

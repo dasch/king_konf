@@ -11,6 +11,13 @@ module KingKonf
       @options = options
     end
 
+    def cast(value)
+      case @type
+      when :float then value.to_f
+      else value
+      end
+    end
+
     def required?
       @required
     end
@@ -20,7 +27,7 @@ module KingKonf
       when :string then value.is_a?(String) || value.nil?
       when :list then value.is_a?(Array)
       when :integer then value.is_a?(Integer) || value.nil?
-      when :float then value.is_a?(Float) || value.nil?
+      when :float then value.is_a?(Float) || value.is_a?(Integer) || value.nil?
       when :boolean then value == true || value == false
       else raise "invalid type #{@type}"
       end
