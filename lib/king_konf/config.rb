@@ -93,7 +93,7 @@ module KingKonf
       if variable.valid?(value)
         instance_variable_set("@#{name}", value)
       else
-        raise ConfigError, "invalid value #{value.inspect}, expected #{variable.type}"
+        raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, expected #{variable.type}"
       end
     end
 
