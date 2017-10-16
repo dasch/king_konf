@@ -57,7 +57,7 @@ describe KingKonf::Config do
 
       expect {
         config.greeting = 42
-      }.to raise_exception(KingKonf::ConfigError, "invalid value 42, expected string")
+      }.to raise_exception(KingKonf::ConfigError, "invalid value 42 for variable `greeting`, expected string")
     end
 
     it "allows defining integer variables" do
@@ -69,7 +69,7 @@ describe KingKonf::Config do
 
       expect {
         config.level = "yolo"
-      }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo", expected integer')
+      }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `level`, expected integer')
     end
 
     it "allows defining boolean variables" do
@@ -82,7 +82,7 @@ describe KingKonf::Config do
 
       expect {
         config.enabled = "yolo"
-      }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo", expected boolean')
+      }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `enabled`, expected boolean')
     end
 
     it "allows setting variables to nil" do
