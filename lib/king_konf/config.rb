@@ -69,7 +69,7 @@ module KingKonf
     end
 
     def get(name)
-      if value = instance_variable_defined?("@#{name}")
+      if instance_variable_defined?("@#{name}")
         instance_variable_get("@#{name}")
       else
         variable = self.class.variable(name)
