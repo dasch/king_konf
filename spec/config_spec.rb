@@ -13,6 +13,8 @@ describe KingKonf::Config do
       desc "whether greeting is enabled"
       boolean :enabled, default: false
 
+      boolean :on_by_default, default: true
+
       list :phrases, sep: ";", items: :string
 
       float :happiness, default: 1.0
@@ -100,6 +102,15 @@ describe KingKonf::Config do
       expect {
         config.enabled = "yolo"
       }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `enabled`, expected boolean')
+    end
+
+    it "allows setting boolean variables to false" do
+      expect(config.on_by_default).to eq true
+
+      config.on_by_default = false
+
+      expect(config.on_by_default).to eq false
+      expect(config.on_by_default?).to eq false
     end
 
     it "allows setting variables to nil" do
