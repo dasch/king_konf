@@ -147,5 +147,22 @@ describe KingKonf::Config do
         config_class.new(env: env)
       }.to raise_exception(KingKonf::ConfigError, "unknown environment variable TEST_MISSING")
     end
+
+    it "can be configured to ignore unknown variables" do
+      config_class = Class.new(KingKonf::Config) do
+        env_prefix :test
+        ignore_unknown_variables true
+
+        string :greeting
+      end
+
+      env = {
+        "TEST_MISSING" => "hello",
+      }
+
+      expect {
+        config_class.new(env: env)
+      }.not_to raise_exception
+    end
   end
 end

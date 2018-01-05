@@ -11,6 +11,15 @@ module KingKonf
         @env_prefix
       end
 
+      def ignore_unknown_variables(should_ignore)
+        @ignore_unknown_variables = should_ignore
+      end
+
+      def ignore_unknown_variables?
+        # Always ignore about unknown ENV vars if there's no prefix defined.
+        @ignore_unknown_variables || !env_prefix
+      end
+
       def variable(name)
         @variables.fetch(name.to_s)
       end
@@ -127,8 +136,8 @@ module KingKonf
         end
       end
 
-      # Only complain about unknown ENV vars if there's a prefix defined.
-      if self.class.env_prefix
+
+      unless self.class.ignore_unknown_variables?
         env.keys.grep(/^#{prefix}/).each do |key|
           unless loaded_keys.include?(key)
             raise ConfigError, "unknown environment variable #{key}"
