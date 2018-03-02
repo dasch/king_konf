@@ -8,7 +8,7 @@ describe KingKonf::Config do
       string :greeting, required: true
 
       desc "pitch level"
-      integer :level, default: 0
+      integer :level, default: 0, allowed_values: 0..99
 
       desc "whether greeting is enabled"
       boolean :enabled, default: false
@@ -34,6 +34,12 @@ describe KingKonf::Config do
       expect {
         config.validate!
       }.to raise_exception(KingKonf::ConfigError, "required variable `greeting` is not defined")
+    end
+
+    it "raises ConfigError if a value is not in the allowed set" do
+      expect {
+        config.level = 100
+      }.to raise_exception(KingKonf::ConfigError, "invalid value 100 for variable `level`, allowed values are 0..99")
     end
   end
 

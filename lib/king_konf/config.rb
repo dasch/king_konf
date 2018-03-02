@@ -33,7 +33,7 @@ module KingKonf
       end
 
       %i(boolean integer float string list).each do |type|
-        define_method(type) do |name, default: nil, required: false, **options|
+        define_method(type) do |name, default: nil, required: false, allowed_values: nil, **options|
           description, @desc = @desc, nil
           variable = Variable.new(
             name: name,
@@ -41,6 +41,7 @@ module KingKonf
             default: default,
             required: required,
             description: description,
+            allowed_values: allowed_values,
             options: options,
           )
 
@@ -99,11 +100,15 @@ module KingKonf
 
       variable = self.class.variable(name)
 
-      if variable.valid?(value)
-        instance_variable_set("@#{name}", variable.cast(value))
-      else
+      if !variable.valid?(value)
         raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, expected #{variable.type}"
       end
+
+      if !variable.allowed?(value)
+        raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, allowed values are #{variable.allowed_values}"
+      end
+
+      instance_variable_set("@#{name}", variable.cast(value))
     end
 
     def validate!

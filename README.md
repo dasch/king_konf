@@ -52,6 +52,9 @@ class MyApplication::Config < KingKonf::Config
 
   # You can also provide a default value to any variable:
   string :body, default: "N/A"
+
+  # You can restrict the set of allowed values:
+  string :category, allowed_values: ["news", "stuff", "accouncements"]
 end
 ```
 
