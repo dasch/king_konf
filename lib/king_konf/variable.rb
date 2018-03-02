@@ -2,12 +2,13 @@ require "king_konf/decoder"
 
 module KingKonf
   class Variable
-    attr_reader :name, :type, :default, :description, :options
+    attr_reader :name, :type, :default, :description, :allowed_values, :options
 
-    def initialize(name:, type:, default: nil, description: "", required: false, options: {})
+    def initialize(name:, type:, default: nil, description: "", required: false, allowed_values: nil, options: {})
       @name, @type, @default = name, type, default
       @description = description
       @required = required
+      @allowed_values = allowed_values
       @options = options
     end
 
@@ -31,6 +32,10 @@ module KingKonf
       when :boolean then value == true || value == false
       else raise "invalid type #{@type}"
       end
+    end
+
+    def allowed?(value)
+      allowed_values.nil? || allowed_values.include?(value)
     end
 
     def decode(value)
