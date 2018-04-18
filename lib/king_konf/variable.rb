@@ -30,6 +30,7 @@ module KingKonf
       when :integer then value.is_a?(Integer) || value.nil?
       when :float then value.is_a?(Float) || value.is_a?(Integer) || value.nil?
       when :boolean then value == true || value == false
+      when :symbol then value.is_a?(Symbol)
       else raise "invalid type #{@type}"
       end
     end

@@ -7,6 +7,8 @@ describe KingKonf::Config do
 
       string :greeting, required: true
 
+      symbol :type, required: true
+
       desc "pitch level"
       integer :level, default: 0, allowed_values: 0..99
 
@@ -68,6 +70,18 @@ describe KingKonf::Config do
       expect {
         config.greeting = 42
       }.to raise_exception(KingKonf::ConfigError, "invalid value 42 for variable `greeting`, expected string")
+    end
+
+    it "allows defining symbol variables" do
+      expect(config.type).to eq nil
+
+      config.type = :symbolized
+
+      expect(config.type).to eq :symbolized
+
+      expect {
+        config.type = 42
+      }.to raise_exception(KingKonf::ConfigError, "invalid value 42 for variable `type`, expected symbol")
     end
 
     it "allows defining integer variables" do

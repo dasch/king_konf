@@ -17,6 +17,10 @@ module KingKonf
       value
     end
 
+    def symbol(value, **)
+      value.to_sym
+    end
+
     def list(value, sep: ",", items: :string)
       value.split(sep).map {|s| public_send(items, s) }
     end
