@@ -49,5 +49,11 @@ describe KingKonf::Decoder do
       expect(KingKonf::Decoder.duration("1w 2d 1h 30m 10s")).to eq duration
       expect(KingKonf::Decoder.duration("1w2d1h30m10s")).to eq duration
     end
+
+    it "raises ConfigError on invalid input" do
+      expect {
+        KingKonf::Decoder.duration("hello")
+      }.to raise_exception(KingKonf::ConfigError, '"hello" is not a duration: must be e.g. `1h 30m`')
+    end
   end
 end

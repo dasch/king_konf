@@ -2,7 +2,10 @@ module KingKonf
   # Decodes specially formatted duration strings.
   module DurationDecoder
     # Either a number or a time unit.
-    REGEX = /(\d+|[wdhms])/
+    PART = /(\d+|[wdhms])/
+
+    # One or more parts, possibly separated by whitespace.
+    VALID_DURATION = /^(#{PART}\s*)+$/
 
     UNITS = {
       "s" => 1,
@@ -13,7 +16,11 @@ module KingKonf
     }
 
     def self.decode(value)
-      value.scan(REGEX).flatten.each_slice(2).map {|number, letter|
+      if value !~ VALID_DURATION
+        raise ConfigError, "#{value.inspect} is not a duration: must be e.g. `1h 30m`"
+      end
+
+      value.scan(PART).flatten.each_slice(2).map {|number, letter|
         number.to_i * UNITS.fetch(letter)
       }.sum
     end
