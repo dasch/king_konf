@@ -18,7 +18,7 @@ module KingKonf
     end
 
     def symbol(value, **)
-      value
+      value.to_sym
     end
 
     def list(value, sep: ",", items: :string)

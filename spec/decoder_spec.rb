@@ -21,4 +21,10 @@ describe KingKonf::Decoder do
       expect(KingKonf::Decoder.float("1.5")).to eq 1.5
     end
   end
+
+  describe ".symbol" do
+    it 'decodes string as symbol' do
+      expect(KingKonf::Decoder.symbol("string")).to eq :string
+    end
+  end
 end
