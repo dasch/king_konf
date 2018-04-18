@@ -38,7 +38,10 @@ module KingKonf
     end
 
     def duration(value, **)
-      if value =~ /^\d*$/
+      case value
+      when ""
+        nil
+      when/^\d*$/
         value.to_i
       else
         DurationDecoder.decode(value)

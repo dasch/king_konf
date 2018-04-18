@@ -33,8 +33,8 @@ describe KingKonf::Decoder do
       expect(KingKonf::Decoder.duration("100")).to eq 100
     end
 
-    it "decodes the empty string as zero" do
-      expect(KingKonf::Decoder.duration("")).to eq 0
+    it "decodes the empty string as nil" do
+      expect(KingKonf::Decoder.duration("")).to eq nil
     end
 
     it "decodes shorthand duration format" do
