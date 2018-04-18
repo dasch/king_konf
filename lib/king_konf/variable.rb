@@ -42,7 +42,7 @@ module KingKonf
       Decoder.public_send(@type, value, **options)
     end
 
-    %i(boolean integer float string list).each do |type|
+    TYPES.each do |type|
       define_method("#{type}?") do
         @type == type
       end
