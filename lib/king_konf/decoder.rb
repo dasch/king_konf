@@ -41,6 +41,8 @@ module KingKonf
       case value
       when ""
         nil
+      when/^\d*\.\d+$/
+        value.to_f
       when/^\d*$/
         value.to_i
       else
