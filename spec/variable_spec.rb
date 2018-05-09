@@ -1,4 +1,4 @@
-require "king_konf/variable"
+require "king_konf"
 
 RSpec.describe KingKonf::Variable do
   describe "#boolean?" do
@@ -9,6 +9,18 @@ RSpec.describe KingKonf::Variable do
       )
       
       expect(variable.boolean?).to eq true
+    end
+  end
+
+  context "duration" do
+    let(:var) { KingKonf::Variable.new(name: "timeout", type: :duration) }
+
+    it "casts strings" do
+      expect(var.cast("1m 30s")).to eq 90
+    end
+
+    it "doesn't cast integers" do
+      expect(var.cast(90)).to eq 90
     end
   end
 end

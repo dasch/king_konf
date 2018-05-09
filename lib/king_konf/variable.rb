@@ -5,16 +5,18 @@ module KingKonf
     attr_reader :name, :type, :default, :description, :allowed_values, :options
 
     def initialize(name:, type:, default: nil, description: "", required: false, allowed_values: nil, options: {})
-      @name, @type, @default = name, type, default
+      @name, @type = name, type
       @description = description
       @required = required
       @allowed_values = allowed_values
       @options = options
+      @default = cast(default)
     end
 
     def cast(value)
       case @type
       when :float then value.to_f
+      when :duration then value.is_a?(String) ? Decoder.duration(value) : value
       else value
       end
     end
@@ -29,6 +31,7 @@ module KingKonf
       when :list then value.is_a?(Array)
       when :integer then value.is_a?(Integer) || value.nil?
       when :float then value.is_a?(Float) || value.is_a?(Integer) || value.nil?
+      when :duration then value.is_a?(Float) || value.is_a?(Integer) || value.is_a?(String) || value.nil?
       when :boolean then value == true || value == false
       when :symbol then value.is_a?(Symbol)
       else raise "invalid type #{@type}"

@@ -20,6 +20,8 @@ describe KingKonf::Config do
       list :phrases, sep: ";", items: :string
 
       float :happiness, default: 1.0
+
+      duration :time_to_sleep, default: "8h"
     end
   }
 
@@ -109,6 +111,18 @@ describe KingKonf::Config do
       expect {
         config.happiness = "yolo"
       }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `happiness`, expected float')
+    end
+
+    it "allows defining duration variables" do
+      expect(config.time_to_sleep).to eq (8 * 60 * 60)
+
+      config.time_to_sleep = "1h 30m"
+
+      expect(config.time_to_sleep).to eq (60 * 60 + 30 * 60)
+
+      expect {
+        config.time_to_sleep = "forever"
+      }.to raise_exception(KingKonf::ConfigError, '"forever" is not a duration: must be e.g. `1h 30m`')
     end
 
     it "allows defining boolean variables" do
