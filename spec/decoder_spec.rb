@@ -33,6 +33,11 @@ describe KingKonf::Decoder do
       expect(KingKonf::Decoder.duration("100")).to eq 100
     end
 
+    it "decodes floats as fractional seconds" do
+      expect(KingKonf::Decoder.duration("5.5")).to eq 5.5
+      expect(KingKonf::Decoder.duration(".9")).to eq 0.9
+    end
+
     it "decodes the empty string as nil" do
       expect(KingKonf::Decoder.duration("")).to eq nil
     end
@@ -44,10 +49,11 @@ describe KingKonf::Decoder do
         1 * 60 * 60,
         30 * 60,
         10,
+        0.5,
       ].sum
 
-      expect(KingKonf::Decoder.duration("1w 2d 1h 30m 10s")).to eq duration
-      expect(KingKonf::Decoder.duration("1w2d1h30m10s")).to eq duration
+      expect(KingKonf::Decoder.duration("1w 2d 1h 30m 10s 500ms")).to eq duration
+      expect(KingKonf::Decoder.duration("1w2d1h30m10s500ms")).to eq duration
     end
 
     it "raises ConfigError on invalid input" do
