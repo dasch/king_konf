@@ -27,4 +27,33 @@ describe KingKonf::Decoder do
       expect(KingKonf::Decoder.symbol("string")).to eq :string
     end
   end
+
+  describe ".duration" do
+    it "decodes plain integers as seconds" do
+      expect(KingKonf::Decoder.duration("100")).to eq 100
+    end
+
+    it "decodes the empty string as nil" do
+      expect(KingKonf::Decoder.duration("")).to eq nil
+    end
+
+    it "decodes shorthand duration format" do
+      duration = [
+        1 * 60 * 60 * 24 * 7,
+        2 * 60 * 60 * 24,
+        1 * 60 * 60,
+        30 * 60,
+        10,
+      ].sum
+
+      expect(KingKonf::Decoder.duration("1w 2d 1h 30m 10s")).to eq duration
+      expect(KingKonf::Decoder.duration("1w2d1h30m10s")).to eq duration
+    end
+
+    it "raises ConfigError on invalid input" do
+      expect {
+        KingKonf::Decoder.duration("hello")
+      }.to raise_exception(KingKonf::ConfigError, '"hello" is not a duration: must be e.g. `1h 30m`')
+    end
+  end
 end

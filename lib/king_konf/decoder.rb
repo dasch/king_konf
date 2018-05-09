@@ -1,3 +1,5 @@
+require "king_konf/duration_decoder"
+
 module KingKonf
   module Decoder
     extend self
@@ -33,6 +35,17 @@ module KingKonf
 
     def float(value, **)
       Float(value)
+    end
+
+    def duration(value, **)
+      case value
+      when ""
+        nil
+      when/^\d*$/
+        value.to_i
+      else
+        DurationDecoder.decode(value)
+      end
     end
   end
 end
