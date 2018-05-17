@@ -17,6 +17,7 @@ module KingKonf
       case @type
       when :float then value.to_f
       when :duration then value.is_a?(String) ? Decoder.duration(value) : value
+      when :symbol then value.is_a?(String) ? value.to_sym : value
       else value
       end
     end

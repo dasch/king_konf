@@ -12,6 +12,18 @@ RSpec.describe KingKonf::Variable do
     end
   end
 
+  context "symbol" do
+    let(:var) { KingKonf::Variable.new(name: "codec", type: :symbol) }
+
+    it "casts strings" do
+      expect(var.cast("gzip")).to eq :gzip
+    end
+
+    it "doesn't cast integers" do
+      expect(var.cast(90)).to eq 90
+    end
+
+  end
   context "duration" do
     let(:var) { KingKonf::Variable.new(name: "timeout", type: :duration) }
 
