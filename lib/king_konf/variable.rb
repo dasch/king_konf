@@ -34,7 +34,7 @@ module KingKonf
       when :float then value.is_a?(Float) || value.is_a?(Integer) || value.nil?
       when :duration then value.is_a?(Float) || value.is_a?(Integer) || value.is_a?(String) || value.nil?
       when :boolean then value == true || value == false
-      when :symbol then value.is_a?(Symbol)
+      when :symbol then value.is_a?(Symbol) || value.is_a?(String)
       else raise "invalid type #{@type}"
       end
     end

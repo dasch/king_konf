@@ -15,6 +15,10 @@ RSpec.describe KingKonf::Variable do
   context "symbol" do
     let(:var) { KingKonf::Variable.new(name: "codec", type: :symbol) }
 
+    it "marks strings as valid" do
+      expect(var.valid?("gzip")).to eq true
+    end
+
     it "casts strings" do
       expect(var.cast("gzip")).to eq :gzip
     end
