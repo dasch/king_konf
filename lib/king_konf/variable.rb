@@ -15,7 +15,7 @@ module KingKonf
 
     def cast(value)
       case @type
-      when :float then value.to_f
+      when :float then value.is_a?(String) || value.is_a?(Integer) ? value.to_f : value
       when :duration then value.is_a?(String) ? Decoder.duration(value) : value
       when :symbol then value.is_a?(String) ? value.to_sym : value
       else value
