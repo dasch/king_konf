@@ -39,7 +39,9 @@ module KingKonf
     end
 
     def allowed?(value)
-      allowed_values.nil? || allowed_values.include?(value)
+      allowed_values.nil? || allowed_values.include?(cast(value))
+    rescue ConfigError
+      false
     end
 
     def decode(value)
