@@ -34,7 +34,7 @@ RSpec.describe KingKonf::Variable do
     end
 
     it "doesn't cast integers" do
-      expect(var.cast(90)).to eql 90
+      expect { var.cast(90) }.to raise_exception(KingKonf::ConfigError)
     end
   end
 

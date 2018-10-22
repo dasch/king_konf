@@ -100,15 +100,13 @@ module KingKonf
 
       variable = self.class.variable(name)
 
-      if !variable.valid?(value)
-        raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, expected #{variable.type}"
-      end
+      cast_value = value.nil? ? nil : variable.cast(value)
 
-      if !variable.allowed?(value)
+      if !variable.allowed?(cast_value)
         raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, allowed values are #{variable.allowed_values}"
       end
 
-      instance_variable_set("@#{name}", variable.cast(value))
+      instance_variable_set("@#{name}", cast_value)
     end
 
     def validate!
