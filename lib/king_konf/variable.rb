@@ -10,16 +10,20 @@ module KingKonf
       @required = required
       @allowed_values = allowed_values
       @options = options
-      @default = cast(default)
+      @default = cast(default) unless default.nil?
     end
 
     def cast(value)
       case @type
-      when :float then value.is_a?(String) || value.is_a?(Integer) ? value.to_f : value
-      when :duration then value.is_a?(String) ? Decoder.duration(value) : value
-      when :symbol then value.is_a?(String) ? value.to_sym : value
+      when :boolean then [true, false].include?(value) ? value : Decoder.boolean(value, **options)
+      when :integer then Integer(value)
+      when :float then Float(value)
+      when :duration then value.is_a?(Integer) ? value : Decoder.duration(value)
+      when :symbol then value.to_sym
       else value
       end
+    rescue ArgumentError, NoMethodError
+      raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, expected #{type}"
     end
 
     def required?
@@ -27,20 +31,17 @@ module KingKonf
     end
 
     def valid?(value)
-      case @type
-      when :string then value.is_a?(String) || value.nil?
-      when :list then value.is_a?(Array)
-      when :integer then value.is_a?(Integer) || value.nil?
-      when :float then value.is_a?(Float) || value.is_a?(Integer) || value.nil?
-      when :duration then value.is_a?(Float) || value.is_a?(Integer) || value.is_a?(String) || value.nil?
-      when :boolean then value == true || value == false
-      when :symbol then value.is_a?(Symbol) || value.is_a?(String)
-      else raise "invalid type #{@type}"
-      end
+      cast(value)
+    rescue ConfigError
+      false
+    else
+      true
     end
 
     def allowed?(value)
-      allowed_values.nil? || allowed_values.include?(value)
+      allowed_values.nil? || allowed_values.include?(cast(value))
+    rescue ConfigError
+      false
     end
 
     def decode(value)

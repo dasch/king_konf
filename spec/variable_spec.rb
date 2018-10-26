@@ -11,6 +11,20 @@ RSpec.describe KingKonf::Variable do
     end
   end
 
+  describe "#allowed" do
+    it "casts the value before checking" do
+      var = KingKonf::Variable.new(name: "codec", type: :symbol, allowed_values: [:gzip])
+
+      expect(var.allowed?("gzip")).to eq true
+    end
+
+    it "returns false if the value is invalid" do
+      var = KingKonf::Variable.new(name: "codec", type: :integer, allowed_values: [:gzip])
+      
+      expect(var.allowed?("yolo")).to eq false
+    end
+  end
+
   describe "#boolean?" do
     it "returns true if the variable is boolean" do
       variable = KingKonf::Variable.new(
@@ -34,7 +48,7 @@ RSpec.describe KingKonf::Variable do
     end
 
     it "doesn't cast integers" do
-      expect(var.cast(90)).to eql 90
+      expect { var.cast(90) }.to raise_exception(KingKonf::ConfigError)
     end
   end
 

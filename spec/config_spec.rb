@@ -45,6 +45,12 @@ describe KingKonf::Config do
         config.level = 100
       }.to raise_exception(KingKonf::ConfigError, "invalid value 100 for variable `level`, allowed values are 0..99")
     end
+
+    it "casts values before checking if they're in the allowed set" do
+      expect {
+        config.level = "99"
+      }.to_not raise_exception
+    end
   end
 
   describe "#decode" do
@@ -68,10 +74,6 @@ describe KingKonf::Config do
       config.greeting = "hello!"
 
       expect(config.greeting).to eq "hello!"
-
-      expect {
-        config.greeting = 42
-      }.to raise_exception(KingKonf::ConfigError, "invalid value 42 for variable `greeting`, expected string")
     end
 
     it "allows defining symbol variables" do
@@ -135,7 +137,7 @@ describe KingKonf::Config do
 
       expect {
         config.enabled = "yolo"
-      }.to raise_exception(KingKonf::ConfigError, 'invalid value "yolo" for variable `enabled`, expected boolean')
+      }.to raise_exception(KingKonf::ConfigError, '"yolo" is not a boolean: must be one of true, 1, false, 0')
     end
 
     it "allows setting boolean variables to false" do
