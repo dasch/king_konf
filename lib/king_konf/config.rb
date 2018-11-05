@@ -71,6 +71,7 @@ module KingKonf
 
     def initialize(env: ENV)
       @desc = nil
+      @ignore_unknown_variables = nil
       load_env(env)
     end
 
