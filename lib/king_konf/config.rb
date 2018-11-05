@@ -70,6 +70,7 @@ module KingKonf
     end
 
     def initialize(env: ENV)
+      @desc = nil
       load_env(env)
     end
 
