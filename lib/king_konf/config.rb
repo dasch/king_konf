@@ -33,7 +33,7 @@ module KingKonf
       end
 
       TYPES.each do |type|
-        define_method(type) do |name, default: nil, required: false, allowed_values: nil, **options|
+        define_method(type) do |name, default: nil, required: false, allowed_values: nil, validate_with: ->(_) { true }, **options|
           description, @desc = @desc, nil
           variable = Variable.new(
             name: name,
@@ -42,6 +42,7 @@ module KingKonf
             required: required,
             description: description,
             allowed_values: allowed_values,
+            validate_with: validate_with,
             options: options,
           )
 
@@ -106,6 +107,10 @@ module KingKonf
 
       if !variable.allowed?(cast_value)
         raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`, allowed values are #{variable.allowed_values}"
+      end
+
+      if !variable.valid?(value)
+        raise ConfigError, "invalid value #{value.inspect} for variable `#{name}`"
       end
 
       instance_variable_set("@#{name}", cast_value)

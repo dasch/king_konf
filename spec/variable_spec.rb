@@ -20,7 +20,7 @@ RSpec.describe KingKonf::Variable do
 
     it "returns false if the value is invalid" do
       var = KingKonf::Variable.new(name: "codec", type: :integer, allowed_values: [:gzip])
-      
+
       expect(var.allowed?("yolo")).to eq false
     end
   end
@@ -33,6 +33,32 @@ RSpec.describe KingKonf::Variable do
       )
 
       expect(variable.boolean?).to eq true
+    end
+  end
+
+  describe "#valid?" do
+    it "returns true if the variable can be cast" do
+      var = KingKonf::Variable.new(name: "foo", type: :integer)
+
+      expect(var.valid?('1')).to eq true
+    end
+
+    it "returns false if the validation function returns false" do
+      var = KingKonf::Variable.new(name: "foo", type: :integer, validate_with: ->(int) { int == 2 })
+
+      expect(var.valid?('1')).to eq false
+    end
+
+    it "returns true if the validation function returns true" do
+      var = KingKonf::Variable.new(name: "foo", type: :integer, validate_with: ->(int) { int == 1 })
+
+      expect(var.valid?('1')).to eq true
+    end
+
+    it "returns a boolean if the validation function returns a non-boolean" do
+      var = KingKonf::Variable.new(name: "foo", type: :integer, validate_with: ->(int) { Object.new })
+
+      expect(var.valid?('1')).to eq true
     end
   end
 

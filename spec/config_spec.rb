@@ -22,6 +22,8 @@ describe KingKonf::Config do
       float :happiness, default: 1.0
 
       duration :time_to_sleep, default: "8h"
+
+      integer :even_number, validate_with: ->(int) { int % 2 == 0 }
     end
   }
 
@@ -50,6 +52,12 @@ describe KingKonf::Config do
       expect {
         config.level = "99"
       }.to_not raise_exception
+    end
+
+    it "raises ConfigError if a value is not valid" do
+      expect {
+        config.even_number = 3
+      }.to raise_exception(KingKonf::ConfigError, "invalid value 3 for variable `even_number`")
     end
   end
 
