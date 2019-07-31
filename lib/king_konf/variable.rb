@@ -2,16 +2,16 @@ require "king_konf/decoder"
 
 module KingKonf
   class Variable
-    attr_reader :name, :type, :default, :description, :allowed_values, :validator, :options
+    attr_reader :name, :type, :default, :description, :allowed_values, :validate_with, :options
 
-    def initialize(name:, type:, default: nil, description: "", required: false, allowed_values: nil, validator: ->(_) { true }, options: {})
+    def initialize(name:, type:, default: nil, description: "", required: false, allowed_values: nil, validate_with: ->(_) { true }, options: {})
       @name, @type = name, type
       @description = description
       @required = required
       @allowed_values = allowed_values
       @options = options
       @default = cast(default) unless default.nil?
-      @validator = validator
+      @validate_with = validate_with
     end
 
     def cast(value)
@@ -36,7 +36,7 @@ module KingKonf
     rescue ConfigError
       false
     else
-      !!validator.call(cast_value)
+      !!validate_with.call(cast_value)
     end
 
     def allowed?(value)

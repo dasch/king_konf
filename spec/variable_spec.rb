@@ -44,19 +44,19 @@ RSpec.describe KingKonf::Variable do
     end
 
     it "returns false if the validation function returns false" do
-      var = KingKonf::Variable.new(name: "foo", type: :integer, validator: ->(int) { int == 2 })
+      var = KingKonf::Variable.new(name: "foo", type: :integer, validate_with: ->(int) { int == 2 })
 
       expect(var.valid?('1')).to eq false
     end
 
     it "returns true if the validation function returns true" do
-      var = KingKonf::Variable.new(name: "foo", type: :integer, validator: ->(int) { int == 1 })
+      var = KingKonf::Variable.new(name: "foo", type: :integer, validate_with: ->(int) { int == 1 })
 
       expect(var.valid?('1')).to eq true
     end
 
     it "returns a boolean if the validation function returns a non-boolean" do
-      var = KingKonf::Variable.new(name: "foo", type: :integer, validator: ->(int) { Object.new })
+      var = KingKonf::Variable.new(name: "foo", type: :integer, validate_with: ->(int) { Object.new })
 
       expect(var.valid?('1')).to eq true
     end

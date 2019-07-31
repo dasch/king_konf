@@ -33,7 +33,7 @@ module KingKonf
       end
 
       TYPES.each do |type|
-        define_method(type) do |name, default: nil, required: false, allowed_values: nil, validator: ->(_) { true }, **options|
+        define_method(type) do |name, default: nil, required: false, allowed_values: nil, validate_with: ->(_) { true }, **options|
           description, @desc = @desc, nil
           variable = Variable.new(
             name: name,
@@ -42,7 +42,7 @@ module KingKonf
             required: required,
             description: description,
             allowed_values: allowed_values,
-            validator: validator,
+            validate_with: validate_with,
             options: options,
           )
 

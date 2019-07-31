@@ -23,7 +23,7 @@ describe KingKonf::Config do
 
       duration :time_to_sleep, default: "8h"
 
-      integer :even_number, validator: ->(int) { int % 2 == 0 }
+      integer :even_number, validate_with: ->(int) { int % 2 == 0 }
     end
   }
 
