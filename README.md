@@ -55,6 +55,9 @@ class MyApplication::Config < KingKonf::Config
 
   # You can restrict the set of allowed values:
   string :category, allowed_values: ["news", "stuff", "accouncements"]
+
+  # You can provide a custom validation function:
+  integer :even_number, validator: ->(int) { int % 2 == 0 }
 end
 ```
 
