@@ -34,7 +34,7 @@ module KingKonf
 
       TYPES.each do |type|
         define_method(type) do |name, default: nil, required: false, allowed_values: nil, validate_with: ->(_) { true }, **options|
-          description, @desc = @desc, nil
+          description, @desc = @desc, nil if defined?(@desc)
           variable = Variable.new(
             name: name,
             type: type,
