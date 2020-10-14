@@ -189,7 +189,7 @@ describe KingKonf::Config do
 
       expect {
         config_class.new(env: env)
-      }.to raise_exception(KingKonf::ConfigError, "unknown environment variable TEST_MISSING")
+      }.to raise_exception(KingKonf::ConfigError, "All environment variables starting with `TEST_` must by valid configuration variables, but `TEST_MISSING` does not match any such variable")
     end
 
     it "can be configured to ignore unknown variables" do
