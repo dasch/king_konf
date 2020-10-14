@@ -132,12 +132,15 @@ module KingKonf
       end
     end
 
+    def env_prefix
+      self.class.env_prefix ? "#{self.class.env_prefix.upcase}_" : ""
+    end
+
     def load_env(env)
       loaded_keys = []
-      prefix = self.class.env_prefix ? "#{self.class.env_prefix.upcase}_" : ""
 
       self.class.variables.each do |variable|
-        key = prefix + variable.name.upcase.to_s
+        key = env_prefix + variable.name.upcase.to_s
 
         if string = env[key]
           value = variable.decode(string)
@@ -146,13 +149,30 @@ module KingKonf
         end
       end
 
-
       unless self.class.ignore_unknown_variables?
-        env.keys.grep(/^#{prefix}/).each do |key|
+        env.keys.grep(/^#{env_prefix}/).each do |key|
           unless loaded_keys.include?(key)
-            raise ConfigError, "All environment variables starting with `#{prefix}` must by valid configuration variables, but `#{key}` does not match any such variable"
+            if closest_match = close_matching_env_var(key)
+              raise ConfigError, "Unknown environment variable `#{key}`. Did you mean `#{closest_match}`?"
+            else
+              raise ConfigError, "All environment variables starting with `#{env_prefix}` must by valid configuration variables, but `#{key}` does not match any such variable"
+            end
           end
         end
+      end
+    end
+
+    # Returns the closest matching defined variable name, or `nil` if no
+    # variable is close enough.
+    def close_matching_env_var(key)
+      closest_match = self.class.variables.map {|variable|
+        env_prefix + variable.name.upcase.to_s
+      }.min_by {|candidate|
+        DidYouMean::Levenshtein.distance(candidate, key)
+      }
+
+      if closest_match && DidYouMean::Levenshtein.distance(closest_match, key) <= 3
+        closest_match
       end
     end
   end
