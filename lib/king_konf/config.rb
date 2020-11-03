@@ -33,7 +33,7 @@ module KingKonf
       end
 
       TYPES.each do |type|
-        define_method(type) do |name, default: nil, required: false, allowed_values: nil, validate_with: ->(_) { true }, **options|
+        define_method(type) do |name, default: nil, required: false, allowed_values: nil, validate_with: ->(_) { true }, deprecation_message: nil, **options|
           description, @desc = @desc, nil if defined?(@desc)
           variable = Variable.new(
             name: name,
@@ -43,6 +43,7 @@ module KingKonf
             description: description,
             allowed_values: allowed_values,
             validate_with: validate_with,
+            deprecation_message: deprecation_message,
             options: options,
           )
 
@@ -102,6 +103,10 @@ module KingKonf
       end
 
       variable = self.class.variable(name)
+
+      if variable.deprecated?
+        raise ConfigError, "`#{name}` has been deprecated: #{variable.deprecation_message}"
+      end
 
       cast_value = value.nil? ? nil : variable.cast(value)
 
