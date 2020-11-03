@@ -2,9 +2,9 @@ require "king_konf/decoder"
 
 module KingKonf
   class Variable
-    attr_reader :name, :type, :default, :description, :allowed_values, :validate_with, :options
+    attr_reader :name, :type, :default, :description, :allowed_values, :validate_with, :options, :deprecation_message
 
-    def initialize(name:, type:, default: nil, description: "", required: false, allowed_values: nil, validate_with: ->(_) { true }, options: {})
+    def initialize(name:, type:, default: nil, description: "", required: false, allowed_values: nil, validate_with: ->(_) { true }, options: {}, deprecation_message: nil)
       @name, @type = name, type
       @description = description
       @required = required
@@ -12,6 +12,7 @@ module KingKonf
       @options = options
       @default = cast(default) unless default.nil?
       @validate_with = validate_with
+      @deprecation_message = deprecation_message
     end
 
     def cast(value)
@@ -43,6 +44,10 @@ module KingKonf
       allowed_values.nil? || allowed_values.include?(cast(value))
     rescue ConfigError
       false
+    end
+
+    def deprecated?
+      !!deprecation_message
     end
 
     def decode(value)

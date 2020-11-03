@@ -209,4 +209,17 @@ describe KingKonf::Config do
       }.not_to raise_exception
     end
   end
+
+  it "allows deprecating variables" do
+    config_class = Class.new(KingKonf::Config) do
+      env_prefix :test
+      string :deprecated_var, deprecation_message: "please don't use this anymore"
+    end
+
+    config = config_class.new
+
+    expect {
+      config.deprecated_var = "hello"
+    }.to raise_exception(KingKonf::ConfigError, "`deprecated_var` has been deprecated: please don't use this anymore")
+  end
 end
