@@ -11,7 +11,11 @@ module KingKonf
       # First, load the ERB template from disk.
       template = ERB.new(File.new(path).read)
 
-      data = YAML.load(template.result(binding))
+      begin
+        data = YAML.load(template.result(binding), aliases: true)
+      rescue ArgumentError
+        data = YAML.load(template.result(binding))
+      end
 
       # Grab just the config for the environment, if specified.
       data = data.fetch(environment) unless environment.nil?
