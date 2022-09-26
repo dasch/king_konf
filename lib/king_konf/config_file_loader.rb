@@ -12,8 +12,10 @@ module KingKonf
       template = ERB.new(File.new(path).read)
 
       begin
+        # Without flag, loading the configuration file fails in Ruby 3.1 if it contains aliases.
         data = YAML.load(template.result(binding), aliases: true)
       rescue ArgumentError
+        # Covering prior YAML versions
         data = YAML.load(template.result(binding))
       end
 
