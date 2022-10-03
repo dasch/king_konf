@@ -1,2 +1,5 @@
-production:
+hello: &hello
   greeting: hello
+
+production:
+  <<: *hello
